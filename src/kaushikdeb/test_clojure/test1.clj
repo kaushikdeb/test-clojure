@@ -3,6 +3,7 @@
             [ring.adapter.jetty :as jetty])
   (:gen-class))
 
+
 (defn test-http
   "Test how http client calls work"
   [url]
@@ -25,6 +26,7 @@
    :headers {"Content-Type" "text/plain"}
    :body (str (now))})
 
+(def ^:cons default-port 3000);; constant default port number, a global definition for this namespace
 
 (defn -main
   "entry point 2 to test jetty server"
@@ -32,6 +34,6 @@
   (jetty/run-jetty current-time {:port ;;The port can optionally be passed as an command line argument
                                  (if (and (not (nil? args)) (> (count args) 0));; If commandline argument was passed
                                      (try (Integer/parseInt (first args));; See if it can be parsed to an Int
-                                          (catch Exception ex 3000));; If not, use the default port 3000
-                                     3000)}));; else of if commandline param is not passed, use default port 3000
+                                          (catch Exception ex default-port));; If not, use the default port 3000
+                                     default-port)}));; else of if commandline param is not passed, use default port 3000
 
