@@ -25,12 +25,13 @@
    :headers {"Content-Type" "text/plain"}
    :body (str (now))})
 
+
 (defn -main
   "entry point 2 to test jetty server"
-  [& args];; Not used
-  (def my-port 3000)
-  (when (and (not (nil? args)) (> (count args) 0))
-    (def my-port
-      (try (Integer/parseInt (first args))
-           (catch Exception exception my-port))))
-  (jetty/run-jetty current-time {:port my-port}))
+  [& args]
+  (jetty/run-jetty current-time {:port ;;The port can optionally be passed as an command line argument
+                                 (if (and (not (nil? args)) (> (count args) 0));; If commandline argument was passed
+                                     (try (Integer/parseInt (first args));; See if it can be parsed to an Int
+                                          (catch Exception ex 3000));; If not, use the default port 3000
+                                     3000)}));; else of if commandline param is not passed, use default port 3000
+
